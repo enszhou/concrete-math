@@ -165,13 +165,113 @@
               此时，该区间内的每一个元素都要和pivot\ $z_j$比较，$z_k$也不例外，所以$z_j$ 和 $z_k$发生比较。
     \end{enumerate}
 
-
 \end{homeworkProblem}
 
 \pagebreak
 
 \begin{homeworkProblem}
 
+    在一块厚奶酪上划出五道直的切痕，可以得到多少块奶酪？（在你划切痕时，奶酪必须保持在它原来的位置上，且每道切痕必定与三维空间中的一个平面相对应。）
+    对$P_n$求一个递归关系，这里$P_n$表示n个不同的平面所能定义的三维区域的最大个数。
+
+    \solution
+
+    切第n刀时，第n刀平面与之前的n-1个平面相交，这n-1个平面在第n个平面上产生n-1条交线，这n-1条交线将第n个平面划分成$L_{n-1}$个子平面。
+    对第n刀而言，增加的奶酪块是从原有的奶酪块区域分裂出来的，第n刀平面上每个子平面和原有的1个奶酪块区域相交，从而将该区域分裂成了2个子区域，也即增加了一个奶酪块区域。
+    所以第n刀平面上子平面的个数就是切第n刀时新增的奶酪块数。由此可得：
+    $$P_n=P_{n-1}+L_{n-1}$$
+    由之前二维平面分割数$L_n$的递归关系可得：
+    $$L_n=\frac{n(n+1)}{2}+1$$
+    则$P_n$的递归关系为：
+    $$
+        P_n=
+        \left\{
+        \begin{aligned}
+             & P_{n-1}+\frac{n(n-1)}{2}+1\  & (n\ge2) \\
+             & 2\                           & (n=1)
+        \end{aligned}
+        \right.
+    $$
+
+    当$n\ge2$时，可以累加求和：
+    $$
+        \begin{aligned}
+            P_n & = P_1+\sum_{i=2}^{n} L_{i-1}                                        \\
+                & =2+\sum_{i=2}^{n} (\frac{i(i-1)}{2}+1)                              \\
+                & =n+1+\sum_{i=2}^{n} \frac{i(i-1)}{2}                                \\
+                & =n+1+\sum_{i=1}^{n-1} \frac{i(i+1)}{2}                              \\
+                & =n+1+\frac{1}{2} \sum_{i=1}^{n-1}i^2 +\frac{1}{2} \sum_{i=1}^{n-1}i \\
+                & =n+1+\frac{n(n-1)(2n-1)}{12} +\frac{n(n-1)}{4}                      \\
+        \end{aligned}
+    $$
+
+    可以发现$n=1$时，$P_n$也满足上述公式，所以综上：
+    $$
+        P_n = n+1+\frac{n(n-1)(2n-1)}{12} +\frac{n(n-1)}{4}
+    $$
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+    约瑟夫有一个朋友，他站在倒数第二的位置上因而获救。当每隔一个人就有一人被处死时，倒数第二个幸存者的号码$I(n)$是多少？
+
+    \solution
+
+    和求$J(n)$的思路一样，分成奇数和偶数两种情况讨论：
+    $$
+        \begin{aligned}
+             & I(2)    = 2              \\
+             & I(3)    = 1              \\
+             & I(2n)   =2I(n)-1 & (n>1) \\
+             & I(2n+1) =2I(n)+1 & (n>1)
+        \end{aligned}
+    $$
+    当n为2的幂次时，即$n=2^k$，$I(2n)-1=2(I(n)-1)$，代入可得：
+    $$
+        \begin{aligned}
+            I(2^k)-1 & = 2^1(I(2^{k-1})-1) \\
+                     & = 2^2(I(2^{k-2})-1) \\
+                     & ...                 \\
+                     & = 2^{k-1}(I(2)-1)   \\
+                     & = 2^{k-1}
+        \end{aligned}
+    $$
+    也就是说，$I(2^k)=2^{k-1}+1$。
+
+    回归本题，讨论一般情况下的n，设$n=2^m+l\ (0\le l<2^m)$，在删去$l$个人之后，剩下$2^m$个人，
+    将这$2^m$个人重新编号为$1,2,3,4,...,2^m$，原编号与新编号映射关系为：
+
+    \begin{center}
+        \begin{tabular}{cccccccc}
+            $\color{blue}1$       & $\color{blue}3$       & $\color{blue}...$ & $\color{blue}2l-1$ & $\color{green}2l+1$ & $\color{green}2l+2$ & $\color{green}...$ & $\color{green}2^m+l$ \\
+            $\downarrow$          & $\downarrow$          & $\downarrow$      & $\downarrow$       & $\downarrow$        & $\downarrow$        & $\downarrow$       & $\downarrow$         \\
+            $\color{blue}2^m-l+1$ & $\color{blue}2^m-l+2$ & $\color{blue}...$ & $\color{blue}2^m$  & $\color{green}1$    & $\color{green}2$    & $\color{green}...$ & $\color{green}2^m-l$ \\
+        \end{tabular}
+    \end{center}
+
+    在$1,2,...,2^m$新编号中，被删去的倒数第二个幸存者新编号为$I(2^m)=2^{m-1}+1$，根据该新编号和映射表可以得到：
+    \begin{itemize}
+        \item 当$2^{m-1}+1\le2^m-l$，即$l<2^{m-1}$时，$2^{m-1}+1$对应的原编号为$2^{m-1}+1+2l$，即$I(n)=2l+1+2^{m-1}$。
+        \item 当$2^{m-1}+1>2^m-l$，即$l\ge2^{m-1}$时，$2^{m-1}+1$对应的原编号为$2(2^{m-1}+1-(2^m-l))-1$，即$I(n)=2l+1-2^{m}$。
+    \end{itemize}
+    综上：
+    $$
+        I(n)=
+        \left\{
+        \begin{aligned}
+             & 2l+1+2^{m-1} = J(n)+2^{m-1} & 0\le l<2^{m-1}    \\
+             & 2l+1-2^{m}  =  J(n)-2^{m}   & 2^{m-1}\le l <2^m
+        \end{aligned}
+        \right.
+    $$
+    其中$n=2^m+l\ (0\le l<2^m)$。
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
 \end{homeworkProblem}
 
 \end{document}
