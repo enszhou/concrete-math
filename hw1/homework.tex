@@ -1,0 +1,177 @@
+\documentclass[fontset=windows]{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{ctex}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass: \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework 1}
+\newcommand{\hmwkDueDate}{March-09, 2022}
+\newcommand{\hmwkClass}{Concrete Math}
+\newcommand{\hmwkClassInstructor}{Professor Chen Xue}
+\newcommand{\hmwkStuNum}{\textbf{SA21011018}}
+\newcommand{\hmwkAuthorName}{\textbf{Zhou Enshuai}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 14:00}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkStuNum\\ \hmwkAuthorName}
+\date{\today}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+    Let $z_1 < z_2 < ... < z_n$ be the correct order of all elements in the array A. Then
+    consider those pivots chosen in the natural order of QuickSort. For any $z_j$ and $z_k$, argue that
+
+    \begin{enumerate}
+        \item If the 1st pivot chosen among $z_j,... ,z_k$ is not $z_j$ or $z_k$, the algorithm won't compare $z_j$ and $z_k$.
+        \item $z_j$ or $z_k$ get compared only if the 1st pivot chosen among  $z_j,... ,z_k$ is either $z_j$ or $z_k$.
+    \end{enumerate}
+
+    \solution
+
+    不妨设$j<k$,则$z_j<z_k$。
+
+    \begin{enumerate}
+        \item 设第一个选自$z_j,... ,z_k$的pivot是$z_i$，且$z_i\neq z_j,z_i\neq z_k$，那么$z_j<z_i<z_k$，
+              这时区间$z_j,... ,z_k$会以$z_i$为pivot划分成两个子区间，$z_j$在前一子区间，$z_k$在后一子区间。在此之后，$z_j$ 和 $z_k$不在同一子区间内，自然不会比较；
+              而在此之前，$z_j$ 和 $z_k$也没有成为pivot（否则$z_i$不是第一个pivot），自然也不会比较。所以，$z_j$ 和 $z_k$不会比较。
+        \item 即证明:“$z_j$ 和 $z_k$发生比较”$\Leftrightarrow$“第一个选自$z_j,... ,z_k$的pivot是$z_j$ 或 $z_k$”。
+              先证明充分性：由1的逆否命题可知，若$z_j$ 和 $z_k$发生比较，则第一个选自$z_j,... ,z_k$的pivot是$z_j$ 或 $z_k$；
+              再证明必要性：若第一个选自$z_j,... ,z_k$的pivot是$z_j$ 或 $z_k$，不妨设选的pivot是$z_j$，则说明之前没有选自该区间的pivot，那么该区间还未被划分。
+              此时，该区间内的每一个元素都要和pivot\ $z_j$比较，$z_k$也不例外，所以$z_j$ 和 $z_k$发生比较。
+    \end{enumerate}
+
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+\end{homeworkProblem}
+
+\end{document}
