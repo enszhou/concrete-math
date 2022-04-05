@@ -1,0 +1,724 @@
+\documentclass[fontset=windows]{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{ctex}
+\usepackage{manfnt}
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  % Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{\textbf{Output:}} % Use Output in the format of Algorithm
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass: \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework 3}
+\newcommand{\hmwkDueDate}{April-06, 2022}
+\newcommand{\hmwkClass}{Concrete Math}
+\newcommand{\hmwkClassInstructor}{Professor Chen Xue}
+\newcommand{\hmwkStuNum}{\textbf{SA21011018}}
+\newcommand{\hmwkAuthorName}{\textbf{Zhou Enshuai}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 14:00}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkStuNum\\ \hmwkAuthorName}
+\date{\today}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{~\\ \textbf{\Large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+
+\begin{homeworkProblem}
+    Let the prime factorization of $2n \choose n$ be
+    $$
+        {2n \choose n }= \prod_{p\le 2n}p^{\ell_p}
+    $$
+    We have shown $\ell_p\le \lfloor \log_p 2n\rfloor $ for any $p$ such that
+    $$
+        n^{\pi(2 n)-\pi(n)} \leq \prod_{p \leq 2 n} p^{\ell_{p}} \leq(2 n)^{\pi(2 n)}
+    $$
+
+    \textbf{(a)}
+
+    $$
+        \begin{aligned}
+             & \frac{2^{2n}}{2n} \le {2n \choose n } \le (2n)^{\pi(2n)}            \\
+             & \pi(2n) \ge \log_{2n} \frac{2^{2n}}{2n}=\frac{2n}{\log_2 n + 1} - 1
+        \end{aligned}
+    $$
+
+    \textbf{(b)}
+
+    $$
+        \begin{aligned}
+             & n^{\pi(2n)-\pi(n)} \le {2n \choose n } \le 2^{2n}      \\
+             & \pi(2n)-\pi(n) \le \log_n 2^{2n} = \frac{2n}{\log_2 n}
+        \end{aligned}
+    $$
+
+    可以找到唯一确定的整数m使得
+    $$
+        \begin{aligned}
+             & 2^{m-1} < n \le 2^{m}        \\
+             & \log_2 n \le m < \log_2 n +1
+        \end{aligned}
+    $$
+    可得
+    $$
+        \begin{aligned}
+             & \pi(2^m)-\pi(2^{m-1}) \le \frac{2^m}{\log_2 2^{m-1}}=\frac{2^m}{m-1} \\
+             & \pi(2^{m-1})-\pi(2^{m-2}) \le \frac{2^{m-1}}{m-2}                    \\
+             & \cdots                                                               \\
+             & \pi(2^2)-\pi(2^1) \le \frac{2^2}{2-1}
+        \end{aligned}
+    $$
+    对上面不等式累加求和
+    $$
+        \begin{aligned}
+            \pi(2^m)-\pi(2^1) & \le \sum_{k=1}^{m-1} \frac{2^{k+1}}{k}                                                                                                                                                                                                                                                                                                                                               \\
+                              & = \sum_{k=1}^{\lceil \frac{m-1}{4} \rceil} \frac{2^{k+1}}{k} + \sum_{k=\lceil \frac{m+3}{4} \rceil}^{\lceil\frac{m-1}{2}\rceil} \frac{2^{k+1}}{k} + \sum_{k=\lceil\frac{m+1}{2}\rceil}^{\lceil\frac{3m-3}{4}\rceil} \frac{2^{k+1}}{k} + \sum_{k=\lceil \frac{3m+1}{4} \rceil}^{m-1} \frac{2^{k+1}}{k}                                                                                \\
+                              & \le \sum_{k=1}^{\lceil \frac{m-1}{4} \rceil} \frac{2^{k+1}}{1} + \sum_{k=\lceil \frac{m+3}{4} \rceil}^{\lceil\frac{m-1}{2}\rceil} \frac{2^{k+1}}{\lceil \frac{m+3}{4} \rceil} + \sum_{k=\lceil\frac{m+1}{2}\rceil}^{\lceil\frac{3m-3}{4}\rceil} \frac{2^{k+1}}{\lceil\frac{m+1}{2}\rceil} + \sum_{k=\lceil \frac{3m+1}{4} \rceil}^{m-1} \frac{2^{k+1}}{\lceil \frac{3m+1}{4} \rceil} \\
+                              & \le  \frac{2^{m+1}}{\lceil \frac{3m+1}{4} \rceil} + \frac{2^{\lceil \frac{3m+5}{4} \rceil}}{\lceil \frac{m+1}{2} \rceil}+ \frac{2^{\lceil \frac{m+3}{2} \rceil}}{\lceil \frac{m+3}{4} \rceil}+ \frac{2^{\lceil \frac{m+7}{4} \rceil}}{1}                                                                                                                                             \\
+                              & \le  \frac{\frac{8}{3}\cdot2^{m}}{ m } + \frac{2^{\lceil \frac{3m+5}{4} \rceil}}{\lceil \frac{m+1}{2} \rceil}+ \frac{2^{\lceil \frac{m+3}{2} \rceil}}{\lceil \frac{m+3}{4} \rceil}+ \frac{2^{\lceil \frac{m+7}{4} \rceil}}{1}                                                                                                                                                        \\
+                              & \le  \frac{\frac{8}{3}\cdot2^{m}}{ m } + \frac{24\cdot2^{ \frac{3m}{4}}}{m} -1                                                                                                                                                                                                                                                                                                       \\
+        \end{aligned}
+    $$
+
+    所以
+
+    $$
+        \begin{aligned}
+            \pi(n) \le \pi(2^m) & \le  \frac{\frac{8}{3}\cdot2^{m}}{ m } + \frac{24\cdot2^{ \frac{3m}{4}}}{m}< \frac{\frac{16}{3}n}{\log_2 n} + \frac{24(2n)^\frac{3}{4}}{\log_2 n} \\
+        \end{aligned}
+    $$
+
+
+    \textbf{(c)}
+
+    $$
+        \begin{aligned}
+             & \pi(n)  < \frac{\frac{16}{3}n}{\log_2 n} + \frac{24(2n)^\frac{3}{4}}{\log_2 n} = \frac{16}{3}\cdot\frac{n}{\log_2n} + o(\frac{n}{\log_2n}) \\
+             & \pi(2n) \ge\frac{2n}{\log_2 n + 1} - 1                                                                                                     \\
+             & \pi(6n) \ge\frac{6n}{\log_2 n + 2} - 1 =  \frac{18}{3}\cdot\frac{n}{\log_2n+2} -1
+        \end{aligned}
+    $$
+
+    当n足够大时可以得到：
+    $$
+        \begin{aligned}
+             & \pi(6n) \ge \frac{18}{3}\cdot\frac{n}{\log_2n+2} -1 >   \frac{16}{3}\cdot\frac{n}{\log_2n} + o(\frac{n}{\log_2n}) >  \pi(n)
+        \end{aligned}
+    $$
+    即
+    $$
+        \begin{aligned}
+             & \pi(6n)  >  \pi(n)       \\
+             & \pi(6n)  - \pi(n)  \ge 1 \\
+        \end{aligned}
+    $$
+    所以$\exists N,\ \text{when}\ n > N,\ [n,6n]$内必存在一个素数。
+    由于放缩的不精确性，可以逐一验证$n\le N$时，$[n,6n]$内均存在素数。
+
+    \textbf{(d)}
+
+    若$p$在$(n,2n]$内，则结论是平凡的，定理得证。下面只讨论小于$n$的素数$p$。
+
+    先证明如下事实，对于任意正数$x$有：
+    $$
+        \begin{aligned}
+             & \lfloor 2x \rfloor - 2\lfloor x \rfloor = \lfloor 2\lfloor x \rfloor + 2\{x\} \rfloor - 2\lfloor x \rfloor
+            = \lfloor 2\{x\}  \rfloor                                                                                     \\
+             & \Rightarrow 0\le \lfloor 2x \rfloor - 2\lfloor x \rfloor
+            = \lfloor 2\{x\}  \rfloor \le 1
+        \end{aligned}
+    $$
+
+    根据书上4.4节的定理，n的素因子分解中p的指数为：
+    $$
+        \begin{aligned}
+            \varepsilon(n!) = \sum_{k\ge 1}\left\lfloor\frac{n}{p^k}\right\rfloor
+        \end{aligned}
+    $$
+    则：
+    $$
+        \begin{aligned}
+            \varepsilon_p \left({2n \choose n}\right)
+             & = \varepsilon_p \left( (2n)!\right) - 2\varepsilon_p \left( n!\right)                                         \\
+             & = \sum_{k\ge 1}\left\lfloor\frac{2n}{p^k}\right\rfloor - 2\sum_{k\ge 1}\left\lfloor\frac{n}{p^k}\right\rfloor \\
+             & = \sum_{k\ge 1}\left(\left\lfloor\frac{2n}{p^k}\right\rfloor - 2\left\lfloor\frac{n}{p^k}\right\rfloor\right) \\
+        \end{aligned}
+    $$
+
+    设某一素数$p$满足$p^{l}\le 2n < p^{l+1}$。
+    因为$\forall x>0,\ \lfloor 2x \rfloor - 2\lfloor x \rfloor =\lfloor 2\{x\}  \rfloor \le 1$，所以：
+    $$
+        \begin{aligned}
+            \varepsilon_p \left({2n \choose n}\right)
+             & = \sum_{k\ge 1}\left(\left\lfloor\frac{2n}{p^k}\right\rfloor - 2\left\lfloor\frac{n}{p^k}\right\rfloor\right)         \\
+             & = \sum_{k\ge 1}\left\lfloor 2 \{\frac{n}{p^k}\}\right \rfloor                                                         \\
+             & = \sum_{k\ge 1}\left( \left\lfloor 2 \{\frac{n}{p^k}\}\right \rfloor \cdot \left[\frac{n}{p^k}\ge0.5\right]   \right) \\
+             & \le \sum_{k\ge 1}\left[\frac{2n}{p^k}\ge 1 \right]                                                                    \\
+             & = l                                                                                                                   \\
+             & = \max_s\{s| p^{s}\le 2n\}                                                                                            \\
+        \end{aligned}
+    $$
+    可以得到$p^{\ell_p}\le 2n$。
+
+    \textbf{(d.1)}
+
+    当$p \ge n$时，若$\ell_p>0$，则最终定理得证（$[n,2n]$间存在素数）。所以不证明当$n\ge p$的情况。
+
+    当$\frac{2n}{3} < p < n$时，$n< 2p < 2n < 3p$，此时$\varepsilon_p((2n)!)=2$，且$\varepsilon_p(n!)=1$。
+    所以
+    $$
+        \ell_p= \varepsilon_p \left({2n \choose n}\right)
+        = \varepsilon_p \left( (2n)!\right) - 2\varepsilon_p \left( n!\right)
+        =2-2=0
+    $$
+
+    \textbf{(d.2)}
+
+    当$ \sqrt{2n} \le p \le \frac{2n}{3}$时，若$p = \sqrt{2n}$，则：
+    $$
+        \begin{aligned}
+             & p^2=2n                    \\
+             & \Rightarrow2 \backslash p
+        \end{aligned}
+    $$
+    这里不考虑$p=2$的情况（因为$p=2$时，$[2,4]$内存在素数$3$，定理得证），而$2\backslash p$，推出矛盾。
+    故$p \neq \sqrt{2n}$，也即$ \sqrt{2n} < p \le \frac{2n}{3}$。这样一来$2n < p^2$，所以：
+    $$
+        \begin{aligned}
+            \ell_p= \varepsilon_p \left({2n \choose n}\right) \le \max_s\{s| p^{s}\le 2n\}  =1
+        \end{aligned}
+    $$
+
+    \textbf{(d.3)}
+
+
+    % 这里只证明$\frac{2n}{3}$是2的指数幂的情况，设$\frac{2n}{3}=2^m$，只要证明
+    % $$
+    %     \prod_{p\le 2^m}p \le 2^{2^m}
+    % $$
+    % 用数学归纳法证明：
+    % 当$m=1$时，不等式成立。
+    % 假设当$m=k$时，不等式成立，则$m=k+1$时
+    % $$
+    %     \begin{aligned}
+    %         \prod_{p\le 2^{k+1}}p
+    %          & = \left(\prod_{p\le 2^{k}}p\right) \cdot\left( \prod_{ 2^{k}<p\le 2^{k+1}}p\right) \\
+    %          & \le 2^{2^k} \cdot \prod_{ 2^{k}<p\le 2^{k+1}}p                                     \\
+    %     \end{aligned}
+    % $$
+
+    % 这个在$n=48$的情况下，存在一个反例，小于32的素数之积大于$2^{32}$。
+
+    下面证明$\prod_{p\le \frac{2n}{3}}p \le 2^{\frac{4n}{3}}$。
+
+    当$\lfloor\frac{2n}{3}\rfloor$为奇数时，设$\lfloor\frac{2n}{3}\rfloor=2m+1$
+    $$
+        \begin{aligned}
+            \prod_{p\le \frac{2n}{3}}p = \prod_{p\le \lfloor\frac{2n}{3}\rfloor}p =\prod_{p\le 2m+1}p \\
+        \end{aligned}
+    $$
+
+    下证$ \prod_{p\le 2m+1}p \le 2^{4m+2}$：
+
+    用数学归纳法证明：
+
+    当$m=1$时，$2\times3<2^3$，不等式成立。
+
+    假设当$m<k$时，不等式成立，则$m=k$时：
+    $$
+        \begin{aligned}
+            \prod_{p\le 2k+1}p
+             & = \left(\prod_{p\le k+1}p\right) \cdot\left( \prod_{ k+1<p\le 2k+1}p\right) \\
+             & \le 2^{2k+2} \cdot \prod_{ k+1<p\le 2k+1}p                                  \\
+        \end{aligned}
+    $$
+
+    又因为$\forall p \in [k+1,2k+1],\ p \backslash {2k+1 \choose k+1}$，所以
+
+    $$
+        \begin{aligned}
+            \left(\prod_{  k+1<p\le 2k+1}p\right)  \Big \backslash {2k+1 \choose k+1} \\
+        \end{aligned}
+    $$
+    所以：
+    $$
+        \begin{aligned}
+            \prod_{  k+1<p\le 2k+1}p
+             & \le  {2k+1 \choose k+1}                                        \\
+             & =\frac{1}{2}\left({2k+1 \choose k+1} + {2k+1 \choose k}\right) \\
+             & \le \frac{1}{2}\sum_{0\le l \le 2k+1}{2k+1 \choose l}          \\
+             & \le \frac{1}{2}\cdot 2^{2k+1}                                  \\
+             & \le 2^{2k}                                                     \\
+        \end{aligned}
+    $$
+    将该结论代入上面不等式：
+    $$
+        \begin{aligned}
+            \prod_{p\le 2k+1}p
+             & \le 2^{2k+2} \cdot \prod_{ k+1<p\le 2k+1}p \\
+             & \le 2^{2k+2} \cdot 2^{2k}                  \\
+             & =2^{4k+2}
+        \end{aligned}
+    $$
+    即$m=k$时不等式也成立。所以证明了$\prod_{p\le 2m+1}p \le 2^{4m+2}$。
+    此时
+    $$
+        \begin{aligned}
+            \prod_{p\le \frac{2n}{3}}p = \prod_{p\le \lfloor\frac{2n}{3}\rfloor}p =\prod_{p\le 2m+1}p\le 2^{4m+2}
+            =2^{2\lfloor\frac{2n}{3}\rfloor} \le 2^{\frac{4n}{3}}
+            \\
+        \end{aligned}
+    $$
+    这便证明了$\lfloor\frac{2n}{3}\rfloor$为奇数时，$\prod_{p\le \frac{2n}{3}}p \le 2^{\frac{4n}{3}}$成立。
+
+    当$\lfloor\frac{2n}{3}\rfloor$为偶数时，$\lfloor\frac{2n}{3}\rfloor-1$为奇数：
+    $$
+        \begin{aligned}
+            \prod_{p\le \frac{2n}{3}}p = \prod_{p\le \lfloor\frac{2n}{3}\rfloor}p =\prod_{p\le\lfloor\frac{2n}{3}\rfloor -1}p
+            \le 2^{2(\lfloor\frac{2n}{3}\rfloor-1)} \le  2^{\frac{4n}{3}}
+        \end{aligned}
+    $$
+    即$\lfloor\frac{2n}{3}\rfloor$为偶数时不等式也成立。
+
+    综上，我们证明了$\prod_{p\le \frac{2n}{3}}p \le 2^{\frac{4n}{3}}$。
+
+    \textbf{(d.4)}
+
+    下面用反证法证明$[n,2n]$内必存在素数。
+    假设$[n,2n]$内不存在素数，那么
+    $$
+        {2n \choose n} = \prod_{p\le 2n}p^{\ell_p} = \prod_{p\le \frac{2n}{3}}p^{\ell_p} \cdot \prod_{ \frac{2n}{3} < p <n}p^{\ell_p}
+        \cdot \prod_{n \le p \le 2n}p^{\ell_p}
+    $$
+
+    由前面三个已证明的定理可得：
+    $$
+        \begin{aligned}
+            {2n \choose n} & = \prod_{p\le \frac{2n}{3}}p^{\ell_p} \cdot \prod_{ \frac{2n}{3} < p <n}p^{\ell_p}\cdot \prod_{n \le p \le 2n}p^{\ell_p}   \\
+                           & \le \prod_{p\le \frac{2n}{3}}p^{\ell_p} \cdot \prod_{ \frac{2n}{3} < p <n}p^{0}                                            \\
+                           & = \prod_{p\le \frac{2n}{3}}p^{\ell_p}                                                                                      \\
+                           & =\prod_{p\le \frac{2n}{3}}p^{\ell_p-1} \cdot \prod_{p\le \frac{2n}{3}}p                                                    \\
+                           & =\prod_{p\le \sqrt{2n}}p^{\ell_p-1} \cdot\prod_{\sqrt{2n} < p < \frac{2n}{3}}p^{\ell_p-1} \cdot \prod_{p\le \frac{2n}{3}}p \\
+                           & \le \prod_{p\le \sqrt{2n}}p^{\ell_p-1} \cdot \prod_{p\le \frac{2n}{3}}p                                                    \\
+                           & \le \prod_{p\le \sqrt{2n}}2n \cdot \prod_{p\le \frac{2n}{3}}p                                                              \\
+                           & < (2n)^{\frac{\sqrt{2n}}{2}} \cdot 2^{\frac{4n}{3}}                                                                        \\
+        \end{aligned}
+    $$
+    又因为(a)中已知$\frac{2^{2n}}{2n}\le{2n \choose n}$，所以：
+    $$
+        \begin{aligned}
+             & \frac{2^{2n}}{2n}\le{2n \choose n}  < (2n)^{\frac{\sqrt{2n}}{2}} \cdot 2^{\frac{4n}{3}} \\
+             & \frac{2^{2n}}{2n} < (2n)^{\frac{\sqrt{2n}}{2}} \cdot 2^{\frac{4n}{3}}                   \\
+             & {2^{2n}} < (2n)^{\frac{\sqrt{2n}}{2}+1} \cdot 2^{\frac{4n}{3}}                          \\
+        \end{aligned}
+    $$
+
+    不等式两边取以2为底的对数：
+    $$
+        \begin{aligned}
+             & 2n<  ({\frac{\sqrt{2n}}{2}+1})(\log_2 n +1) + {\frac{4n}{3}} \\
+             & {\frac{2n}{3}}<  ({\frac{\sqrt{2n}}{2}+1})(\log_2 n +1)      \\
+             & {\frac{2n}{3}}<  o(n)                                        \\
+        \end{aligned}
+    $$
+    当$n$足够大时，$ {\frac{2n}{3}}<  o(n)  $显然是不成立的，所以此时推出矛盾。
+    即$\exists N,\ \text{when}\ n > N,\ [n,2n]$内必存在一个素数。
+    这里$N$是可以很容易找出来的，那么对于小于$N$的$n$，逐一验证即可（$N$小于1000，这里不再精确地寻找）。
+    最终可以证明$\forall n, \ [n,2n]$内必存在一个素数。
+
+
+\end{homeworkProblem}
+
+
+\pagebreak
+
+
+\begin{homeworkProblem}
+    设$S(m,n)$是满足$ m \bmod k + n \bmod k\ge k $的所有整数$k$组成的集合．
+    如$S(7,9)=\{2,4,5,8,10,11,12,13,14,15,16\}$．证明
+    $$
+        \sum_{k\in S(m,n)} \varphi(k)=mn
+    $$
+
+    \solution
+
+    先证明：
+    $$
+        \begin{aligned}
+            \sum_{1\le m\le n}\sum_{d\backslash m}\varphi(d)
+             & = \sum_{1\le m\le n}\sum_{d\ge 1}\varphi(d)[d\backslash m]               \\
+             & = \sum_{d\ge 1}\sum_{1\le m\le n}\varphi(d)[d\backslash m]               \\
+             & = \sum_{d\ge 1}\left(\varphi(d) \sum_{1\le m\le n}[d\backslash m]\right) \\
+             & = \sum_{d\ge 1}\varphi(d) \left\lfloor \frac{n}{d} \right\rfloor         \\
+        \end{aligned}
+    $$
+
+    观察下面等式：
+    $$
+        \begin{aligned}
+            \left\lfloor  \frac{m+n}{k} \right\rfloor
+             & = \left\lfloor \frac{ \left\lfloor \frac{m}{k} \right\rfloor k + m\bmod k + \left\lfloor \frac{n}{k} \right\rfloor k + n\bmod k}{k} \right\rfloor \\
+             & = \left\lfloor \left\lfloor \frac{m}{k} \right\rfloor + \left\lfloor \frac{n}{k} \right\rfloor + \frac{m\bmod k + n\bmod k}{k} \right\rfloor      \\
+             & = \left\lfloor \frac{m}{k} \right\rfloor + \left\lfloor \frac{n}{k} \right\rfloor + \left\lfloor  \frac{m\bmod k + n\bmod k}{k} \right\rfloor     \\
+        \end{aligned}
+    $$
+
+    所以：
+    $$
+        \begin{aligned}
+            \left\lfloor  \frac{m+n}{k} \right\rfloor
+            = \left\lfloor \frac{m}{k} \right\rfloor + \left\lfloor \frac{n}{k} \right\rfloor + \left\lfloor  \frac{m\bmod k + n\bmod k}{k} \right\rfloor
+            = \left\lfloor \frac{m}{k} \right\rfloor + \left\lfloor \frac{n}{k} \right\rfloor + 1
+            \Longleftrightarrow  {m\bmod k + n\bmod k} \ge k
+        \end{aligned}
+    $$
+
+    即：
+    $$
+        \begin{aligned}
+            \left\lfloor  \frac{m+n}{k} \right\rfloor
+            - \left\lfloor \frac{m}{k} \right\rfloor - \left\lfloor \frac{n}{k} \right\rfloor = 1
+            \Longleftrightarrow  {m\bmod k + n\bmod k} \ge k
+        \end{aligned}
+    $$
+
+    利用指示函数“$[]$”，可以得到：
+    $$
+        \begin{aligned}
+            \left(\left\lfloor \frac{m+n}{k} \right\rfloor - \left\lfloor \frac{m}{k} \right\rfloor - \left\lfloor \frac{n}{k} \right\rfloor\right)
+            = \left[\left\lfloor  \frac{m+n}{k} \right\rfloor
+                - \left\lfloor \frac{m}{k} \right\rfloor - \left\lfloor \frac{n}{k} \right\rfloor = 1 \right]
+        \end{aligned}
+    $$
+
+    可得：
+    $$
+        \begin{aligned}
+            \sum_{k\in S(m,n)} \varphi(k)
+             & = \sum_{\left\lfloor \frac{m+n}{k} \right\rfloor = \left\lfloor \frac{m}{k} \right\rfloor + \left\lfloor \frac{n}{k} \right\rfloor + 1} \varphi(k)                                                       \\
+             & = \sum_{k \ge 1} \varphi(k) \left[\left\lfloor \frac{m+n}{k} \right\rfloor = \left\lfloor \frac{m}{k} \right\rfloor + \left\lfloor \frac{n}{k} \right\rfloor + 1 \right]                                 \\
+             & = \sum_{k \ge 1} \varphi(k) \left(\left\lfloor \frac{m+n}{k} \right\rfloor - \left\lfloor \frac{m}{k} \right\rfloor - \left\lfloor \frac{n}{k} \right\rfloor\right)                                      \\
+             & = \sum_{k \ge 1} \varphi(k) \left\lfloor \frac{m+n}{k} \right\rfloor - \sum_{k \ge 1} \varphi(k)\left\lfloor \frac{m}{k} \right\rfloor - \sum_{k \ge 1} \varphi(k)\left\lfloor \frac{n}{k} \right\rfloor \\
+             & = \sum_{1\le k\le m+n}\sum_{d\backslash k} \varphi(k) - \sum_{1\le k\le m}\sum_{d\backslash k} \varphi(k) - \sum_{1\le k\le n}\sum_{d\backslash k} \varphi(k)                                            \\
+             & = \sum_{1\le k\le m+n}k - \sum_{1\le k\le m}k - \sum_{1\le k\le n}k                                                                                                                                      \\
+             & = \frac{(m+n)^2+m+n-m^2-m-n^2-n}{2}                                                                                                                                                                      \\
+             & = mn                                                                                                                                                                                                     \\
+        \end{aligned}
+    $$
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    m次单位根$\omega=\mathrm{e}^{2 \pi i / m}=\cos (2 \pi / m)+i \sin (2 \pi / m)$.
+    $z^m-1$在复数范围内的分解：
+    $$z^m-1=\prod_{0\le k <m}(z-\omega^k)$$
+
+    \begin{itemize}
+        \item 设$\psi_{m}(z)=\prod_{0 \le k<m, k \perp m}\left(z-\omega^{k}\right)$，
+              证明$z^m-1=\prod_{d \backslash m}\psi_d(z)$
+        \item 证明$\psi_{m}(z)=\prod_{d\backslash m}(z^d-1)^{\mu(m/d)}$
+
+    \end{itemize}
+
+    \solution
+
+    % 设记号$\left\{a,b\right\}_{condition}$含义为：
+    % $$
+    %     \{a,b\}_{condition} =\left\{
+    %     \begin{aligned}
+    %          & a,\ if\ condition\ is\ true  \\
+    %          & b,\ if\ condition\ is\ false \\
+    %     \end{aligned}
+    %     \right.
+    % $$
+
+    \textbf{a.}
+
+    % $$
+    %     \begin{aligned}
+    %         z^m-1 & = \prod_{0\le k <m}(z-\omega^k)                                                            \\
+    %               & = \prod_{0\le k <m}\prod_{d=gcd(m,k)}(z-\omega^k)                                          \\
+    %               & = \prod_{0\le k <m}\prod_{d\ge1}\{(z-\omega^k),1\}_{d=gcd(m,k)}                            \\
+    %               & = \prod_{0\le k <m}\prod_{d\backslash m}\{(z-\omega^k),1\}_{d=gcd(m,k)}                    \\
+    %               & = \prod_{d\backslash m}\prod_{0\le k <m}\{(z-\omega^k),1\}_{d=gcd(m,k)}                    \\
+    %               & = \prod_{d\backslash m}\prod_{0\le k <m}\{(z-\omega^k),1\}_{m/d \perp k/d}                 \\
+    %               & = \prod_{d\backslash m}\prod_{0\le k/d <m/d}\{(z-\omega^{k/d \cdot d}),1\}_{m/d \perp k/d} \\
+    %               & = \prod_{d\backslash m}\prod_{0\le k' <m/d}\{(z-\omega^{k' \cdot d}),1\}_{m/d \perp k'}    \\
+    %               & = \prod_{d\backslash m}\prod_{0\le k' <d}\{(z-\omega^{k'm/d}),1\}_{d \perp k'}             \\
+    %               & = \prod_{d\backslash m}\prod_{0\le k' <d, d \perp k'}(z-\omega^{k'm/d})                    \\
+    %               & = \prod_{d\backslash m}  \psi_d(z)                                                         \\
+    %     \end{aligned}
+    % $$
+
+    $$
+        \begin{aligned}
+            z^m-1 & = \prod_{0\le k <m}(z-\omega^k)                                                                    \\
+                  & = \prod_{0\le k <m}\prod_{d=gcd(m,k)}(z-\omega^k)                                                  \\
+                  & = \prod_{0\le k <m}\prod_{d\ge1} (z-\omega^k)^{\left[d=gcd(m,k)\right]}                            \\
+                  & = \prod_{0\le k <m}\prod_{d\backslash m} (z-\omega^k)^{\left[d=gcd(m,k)\right]}                    \\
+                  & = \prod_{d\backslash m}\prod_{0\le k <m} (z-\omega^k)^{\left[d=gcd(m,k)\right]}                    \\
+                  & = \prod_{d\backslash m}\prod_{0\le k <m} (z-\omega^k)^{\left[m/d \perp k/d\right]}                 \\
+                  & = \prod_{d\backslash m}\prod_{0\le k/d <m/d} (z-\omega^{k/d \cdot d})^{\left[m/d \perp k/d\right]} \\
+                  & = \prod_{d\backslash m}\prod_{0\le k' <m/d} (z-\omega^{k' \cdot d})^{\left[m/d \perp k'\right]}    \\
+                  & = \prod_{d\backslash m}\prod_{0\le k' <d} (z-\omega^{k'm/d})^{\left[d \perp k'\right]}             \\
+                  & = \prod_{d\backslash m}\prod_{0\le k' <d, d \perp k'}(z-\omega^{k'm/d})                            \\
+                  & = \prod_{d\backslash m}  \psi_d(z)                                                                 \\
+        \end{aligned}
+    $$
+
+    证毕.
+    这里面需要注意的是：$\psi_{d}(z)=\prod_{0 \le k<d, k \perp d}\left(z-\omega^{k}\right)$
+    式中的$\omega$指的是$d$次单位根.
+
+    ~\\
+
+    \textbf{b.}
+
+    观察待证等式，可以发现它和莫比乌斯反演类似，所以考虑证明乘法形式的反演,代入a的结论可得：
+    $$
+        \begin{aligned}
+            \prod_{d\backslash m}(z^d-1)^{\mu(m/d)}
+             & = \prod_{d\backslash m}\left(\prod_{k\backslash d}\psi_k(z)\right)^{\mu(m/d)}        \\
+             & = \prod_{d\backslash m}\prod_{k\backslash d}\psi_k(z)^{\mu(m/d)}                     \\
+             & = \prod_{k\backslash m}\prod_{d\backslash m, k\backslash d}\psi_k(z)^{\mu(m/d)}      \\
+             & = \prod_{k\backslash m}\psi_k(z)^{\sum_{d\backslash m, k\backslash d} \mu(m/d)}      \\
+             & = \prod_{k\backslash m}\psi_k(z)^{\sum_{(d/k)\backslash (m/k)} \mu(\frac{m/k}{d/k})} \\
+             & = \prod_{k\backslash m}\psi_k(z)^{\sum_{d'\backslash (m/k)} \mu(\frac{m/k}{d'})}     \\
+             & = \prod_{k\backslash m}\psi_k(z)^{\sum_{d'\backslash (m/k)} \mu(d')}                 \\
+             & = \prod_{k\backslash m}\psi_k(z)^{\left[\frac{m}{k}=1\right]}                        \\
+             & = \psi_m(z)                                                                          \\
+        \end{aligned}
+    $$
+
+    证毕.
+
+
+\end{homeworkProblem}
+
+
+\pagebreak
+
+
+\begin{homeworkProblem}
+    设$f(m)=\sum_{d\backslash m}d$.求$f(m)$是2的幂的一个必要且充分条件.
+
+    \solution
+
+    设m的素因子分解为：
+    $$
+        \begin{aligned}
+            m = p_1^{e_1} p_2^{e_2} \cdots p_l^{e_l} =\prod_{1\le k \le l}p_k^{e_k}
+        \end{aligned}
+    $$
+    则：
+    $$
+        \begin{aligned}
+            f(m) & =\sum_{d\backslash m}d                                                                                                                                              \\
+                 & =\sum_{\substack{0\le i_1 \le e_1                                                                                                                                   \\ \cdots \\ 0\le i_l \le e_l}} \left(\prod_{1\le k \le l}p_k^{i_k} \right)\\
+                 & =\sum_{0\le i_1 \le e_1}\sum_{0\le i_1 \le e_1}\cdots\sum_{0\le i_l \le e_l} \left(\prod_{1\le k \le l}p_k^{i_k} \right)                                            \\
+                 & =\left(\sum_{0\le i_1 \le e_1}p_1^{i_1}\right) \cdot \left(\sum_{0\le i_2 \le e_2}p_2^{i_2}\right) \cdot \cdots \cdot \left(\sum_{0\le i_l \le e_l}p_l^{i_l}\right) \\
+        \end{aligned}
+    $$
+
+    $f(m)$可以分解为上述若干因子的乘积，所以$f(m)$是2的幂当且仅当上述每一项因子都是2的幂：
+    $$
+        \sum_{0\le i_j \le e_j}p_j^{i_j} = 2^t, \quad 0\le j\le l,\quad t>0
+    $$
+    下面我们研究该类型和式为2的幂的充要条件：
+
+    \textbf{1.}先找出必要条件。为了方便书写下面用$p$来指代m的某一素因子：
+    $$
+        \begin{aligned}
+            \sum_{0\le i \le e}p^{i} = 1+p+p^2+\cdots p^e= 2^t
+        \end{aligned}
+    $$
+    由于$e\ge1$，则$\sum_{i=0}^e p^{i} \ge 3$，那么$\sum_{i=0}^e p^{i}$不可能是2的0次幂，
+    所以$\sum_{i=0}^e p^{i}$必然是偶数。
+    显然$p\neq 2$，否则和式$\sum_{i=0}^e p^{i}$为奇数。
+    那么$p$必为奇素数，所以$p^i$也是奇数，那么和式$\sum_{i=0}^e p^{i}$有偶数个求和项，即$e+1$为偶数。
+    这样一来和式可以进行因式分解：
+    $$
+        \begin{aligned}
+            \sum_{0\le i \le e}p^{i} & = 1+p+p^2+\cdots p^e                \\
+                                     & =(1+p)+p^2(1+p)+\cdots p^{e-1}(1+p) \\
+                                     & =(1+p)(1+p^2+p^4+\cdots+p^{e-1})    \\
+                                     & =2^t                                \\
+        \end{aligned}
+    $$
+    继续分解，则$(1+p)$与和式$\sum_{i=0}^{\frac{e-1}{2}} p^{2i}=1+p^2+p^4+\cdots+p^{e-1}$均是2的幂。
+    这时有两种情况：
+
+    \textbf{(1)}
+
+    $e=1,\ \sum_{i=0}^{\frac{e-1}{2}}=2^0=1$，则$\sum_{i=0}^e p^{i}=1+p$
+
+    \textbf{(2)}
+
+    $e>1,\ \sum_{i=0}^{\frac{e-1}{2}}=2^{t'},\ t'>0$。同理可证$\frac{e+1}{2}$为偶数。
+    同样地继续对$\sum_{i=0}^{\frac{e-1}{2}}$分解，可得$(1+p^2)\backslash \sum_{i=0}^{\frac{e-1}{2}}$，
+    那么$(1+p^2)$也是2的幂。可得：
+    $$
+        \begin{aligned}
+            1+p=2^{t_1},\ t_1\ge 2   \\
+            1+p^2=2^{t_2},\ t_2\ge 3 \\
+        \end{aligned}
+    $$
+    则：
+    $$
+        \begin{aligned}
+            (1+p)^2=2^{2t_1}=p^2+2p+1=2^{t_2}+2(2^{t_1}-1)
+        \end{aligned}
+    $$
+    也即：
+    $$
+        \begin{aligned}
+             & 2^{2t_1}=2^{t_2}+2(2^{t_1}-1), \ t_1\ge 2,\ t_2\ge 3 \\
+             & 2^{t_2-1}+2^{t_1} - 2^{2t_1-1}= 1                    \\
+        \end{aligned}
+    $$
+    等式左边是偶数，而右边是奇数，推出矛盾，所以该种情况不成立。
+    所以$e=1,\ \sum_{i=0}^e p^{i}=1+p=2^t$，也即$p=2^t-1$为梅森素数，而且m素因子分解中p的指数为1。
+
+    \textbf{2.}再证明$p$为梅森素数且$e=1$为$\sum_{i=0}^e p^{i}$是2的幂的充分条件：
+
+    根据梅森素数定义代入$e=1$可得：
+    $$
+        \sum_{i=0}^e p^{i} = 1+p=1+2^t-1=2^t
+    $$
+    证毕。
+
+    综上所述,$f(m)$为2的幂当且仅当$f(m)$的每一项因子$\sum_{0\le i_j \le e_j}p_j^{i_j}$都形如$1+p$，其中p是梅森素数，
+    即$m$的素因子分解中每一个素因子的指数均为1，且每一个素因子均为梅森素数。
+
+    也就是说$f(m)$为2的幂当且仅当$m$是若干不同梅森素数的乘积。
+
+\end{homeworkProblem}
+
+
+\end{document}
