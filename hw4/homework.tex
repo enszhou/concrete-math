@@ -1,0 +1,414 @@
+\documentclass[fontset=windows]{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{ctex}
+\usepackage{manfnt}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+
+% \pagecolor{black}
+% \color{white}
+
+
+% hypergeometric function
+\newmuskip\hfmuskip
+\newcommand*\hf[4][6]{%
+  \begingroup % only local assignments
+  \hfmuskip=#1mu\relax
+  \mathchardef\normalcomma=\mathcode`,
+  % make the comma math active
+  \mathcode`\,=\string"8000
+  % and define it to be \hfcomma
+  \begingroup\lccode`\~=`\,
+  \lowercase{\endgroup\let~}\hfcomma
+  % typeset the formula
+%   {}_{#2}F_{#3}{\left(\genfrac..{0pt}{}{#4}{#5}\bigg|#6\right)}%
+  F{\left(\genfrac..{0pt}{}{#2}{#3}\bigg|#4\right)}%
+  \endgroup
+}
+\newcommand{\hfcomma}{{\normalcomma}\mskip\hfmuskip}
+% hypergeometric function
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  % Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{\textbf{Output:}} % Use Output in the format of Algorithm
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass: \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+\newcommand{\hmwkTitle}{Homework 4}
+\newcommand{\hmwkDueDate}{May 18, 2022}
+\newcommand{\hmwkClass}{Concrete Math}
+\newcommand{\hmwkClassInstructor}{Professor Xie Wei}
+\newcommand{\hmwkStuNum}{\textbf{SA21011018}}
+\newcommand{\hmwkAuthorName}{\textbf{Zhou Enshuai}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 14:00}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkStuNum\\ \hmwkAuthorName}
+\date{\today}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{~\\ \textbf{\Large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    证明 ${-1/3 \choose n}{-2/3 \choose n}
+        = {3n\choose 2n}{2n\choose n}/3^{3n}$
+    ,其中$n\in \mathbb{Z}. $
+
+    \solution
+
+    根据定义有：
+    \begin{align*}
+        {-1/3 \choose n}  = \frac{(-\frac{1}{3})^{\underline n}}{n!}  = \frac{(-\frac{1}{3})(-\frac{1}{3}-1)\cdots(-\frac{1}{3}-n+1)}{n!} \\
+        {-2/3 \choose n}  = \frac{(-\frac{2}{3})^{\underline n}}{n!}  = \frac{(-\frac{2}{3})(-\frac{2}{3}-1)\cdots(-\frac{2}{3}-n+1)}{n!}
+    \end{align*}
+    则：
+    \begin{align*}
+        {-1/3 \choose n}{-2/3 \choose n}
+         & = \frac{(-\frac{1}{3})(-\frac{1}{3}-1)\cdots(-\frac{1}{3}-n+1)}{n!}
+        \cdot  \frac{(-\frac{2}{3})(-\frac{2}{3}-1)\cdots(-\frac{2}{3}-n+1)}{n!}                                                           \\
+         & =\frac{(n-1+\frac{1}{3})(n-2+\frac{1}{3})\cdots(\frac{1}{3})\cdot(n-1+\frac{2}{3})(n-2+\frac{2}{3})\cdots(\frac{2}{3})}{(n!)^2} \\
+         & =\frac{(3n-2)(3n-5)(3n-8)\cdot 4 \cdot 1 \cdot(3n-1)(3n-4)(3n-7)\cdot 5 \cdot 2}{(n!)^2\cdot 3^{2n}}                            \\
+         & =\frac{1 \cdot 2 \cdot 4 \cdot 5 \cdots (3n-2)(3n-1)}{(n!)^2\cdot 3^{2n}}                                                       \\
+         & =\frac{(3n)!}{(n!)^2\cdot 3^{2n} \cdot 3 \cdot 6 \cdots 3n}                                                                     \\
+         & =\frac{(3n)!}{(n!)^2\cdot 3^{2n} \cdot 3^n \cdot n!}                                                                            \\
+         & =\frac{1}{ 3^{3n}}\frac{(3n)!}{(2n)!\cdot n!}\frac{(2n)!}{(n!)^2}                                                               \\
+         & =\frac{1}{ 3^{3n}}{3n\choose 2n}{2n\choose n}
+    \end{align*}
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    用超几何级数方法求$\sum_k{m \choose k+n}{k+n \choose 2k}4^k$.
+
+    \solution
+
+    设$t_k = {m \choose k+n}{k+n \choose 2k}4^k$,原式为$S(m,n)=\sum_k t_k$.
+    当$k<0$时，${k+n \choose 2k}=0$，所以求和项$t_k=0$,所以下面只考虑$k>=0$的情况.
+
+    首先
+    \begin{align*}
+         & t_0 = {m \choose n}                                                                                                        \\
+         & t_k = {m \choose k+n}{k+n \choose 2k}4^k = \frac{m!(k+n)!4^k}{(k+n)!(m-k-n)!(2k)!(n-k)!}=\frac{m!4^k}{(m-k-n)!(2k)!(n-k)!}
+    \end{align*}
+    那么
+    \begin{align*}
+        \frac{t_{k+1}}{t_k}
+         & =\frac{4(m-k-n)!(2k)!(n-k)!}{(m-k-1-n)!(2k+2)!(n-k-1)!} \\
+         & =\frac{4(m-k-n)(n-k)}{(2k+1)(2k+2)}                     \\
+         & =\frac{(k+n-m)(k-n)(1)}{(k+\frac{1}{2})(k+1)}           \\
+    \end{align*}
+
+    则$t_k$是超几何项,原式可以用超几何级数表示为:
+    \begin{align}
+        S(m,n) = \sum_k t_k = \sum_{k \ge 0} t_k = {m \choose n} \hf{n-m,-n}{\frac{1}{2}}{1}
+        \label{hf_S}
+    \end{align}
+    根据书上公式(5.93)有:
+    \begin{align}
+        \hf{a,-n}{c}{1} = \frac{(a-c)^{\underline n}}{(-c)^{\underline n}}
+    \end{align}
+    代入公式(\ref{hf_S})可得:
+    \begin{align*}
+        S(m,n)
+         & = {m \choose n} \frac{(n-m-\frac{1}{2})^{\underline n}}{(-\frac{1}{2})^{\underline n}}                                                \\
+         & = {m \choose n} \frac{(n-m-\frac{1}{2})(n-m-\frac{3}{2})\cdots(-m+\frac{1}{2})}{(-\frac{1}{2})(-\frac{3}{2})\cdots(-\frac{1}{2}-n+1)} \\
+         & = {m \choose n} \frac{(2m-1)(2m-3)\cdots(2m-2n+1)}{1 \cdot 3 \cdots (2n-1)}                                                           \\
+         & = {m \choose n} \frac{\frac{(2m)!}{(2m-2n)!\cdot 2^n\cdot \frac{m!}{(m-n)!}}}{\frac{(2n)!}{2^n\cdot n!}}                              \\
+         & = {m \choose n} \frac{(2m)!}{(2n!)(2m-2n)!}\cdot\frac{n!(m-n)!}{m!}                                                                   \\
+         & = {2m \choose 2n}
+    \end{align*}
+
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    用Gosper方法求
+    \begin{enumerate}
+        \item $\sum\frac{\delta k}{k^3-k}$
+        \item $\sum{-3 \choose 2k}2^k \delta k$
+    \end{enumerate}
+
+    \solution
+
+    ~\\
+    \textbf{\Large 1.}
+
+    设$t(k) = \frac{1}{k^3-k}$,$\sum \frac{\delta k}{k^3-k} = T(k) + C$.
+
+    首先
+    \begin{align*}
+        \frac{t(k+1)}{t(k)} = \frac{(k+1)k(k-1)}{(k+2)(k+1)k}=\frac{k-1}{k+2}
+    \end{align*}
+    所以
+    \begin{align*}
+         & p(k) = 1,\ q(k)=k-1,\ r(k) = k+1 \\
+         & Q(k) = -2,\ R(k)=2               \\
+         & 1= (k-1)s(k+1)-(k+1)s(k)
+    \end{align*}
+    所以$deg(Q)=deg(R)$,则$deg(s)=d=deg(p)-deg(Q)=0$,所以$s(k)=\alpha_0$,
+    代入可得:
+    \begin{align*}
+         & 1 =  \alpha_0(k-1) - \alpha_0(k+1)       \\
+         & \Rightarrow s(k)=\alpha_0 = -\frac{1}{2}
+    \end{align*}
+    可得:
+    \begin{align*}
+        T(k) = \frac{-\frac{1}{2}(k+1)\frac{1}{k^3-k}}{1}=-\frac{1}{2k(k-1)}
+    \end{align*}
+
+
+    \textbf{\Large 2.}
+
+    首先$t_k = {-3 \choose 2k}2^k $,有:
+    \begin{align*}
+        \frac{t(k+1)}{t(k)} = \frac{{-3 \choose 2k+2}2^{k+1}}{{-3 \choose 2k}2^k}
+        =\frac{2(k+2)(k+\frac{3}{2})}{(k+1)(k+\frac{1}{2})}
+    \end{align*}
+
+    所以
+    \begin{align*}
+         & p(k) = (k+1)(k+\frac{1}{2}),\ q(k)=2,\ r(k) = 1 \\
+         & Q(k) = 1,\ R(k)=3                               \\
+         & (k+1)(k+\frac{1}{2}) = 2s(k+1)-s(k)
+    \end{align*}
+    所以$deg(Q)=deg(R)$,则$deg(s)=d=deg(p)-deg(Q)=2$,所以$s(k)=\alpha_2k^2+\alpha_1k+\alpha_0$,
+    代入可得:
+    \begin{align*}
+         & (k+1)(k+\frac{1}{2}) =  2\alpha_2(k+1)^2+2\alpha_1(k+1)+2\alpha_0 - \alpha_2k^2-\alpha_1k-\alpha_0 \\
+         & \Rightarrow \left\{
+        \begin{aligned}
+            \alpha_2 & = 1            \\
+            \alpha_1 & = -\frac{5}{2} \\
+            \alpha_0 & = \frac{7}{2}
+        \end{aligned}
+        \right.
+        \ \Rightarrow \  s(k) = k^2-\frac{5}{2}k+\frac{7}{2}
+        \ \Rightarrow \  T(k) = \frac{(k^2-\frac{5}{2}k+\frac{7}{2}){-3 \choose 2k}2^k}{(k+1)(k+\frac{1}{2})}
+        =(k^2-\frac{5}{2}k+\frac{7}{2})\cdot2^{k+1}
+    \end{align*}
+
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    用Gosper-Zeilberger方法求$S(n)=\sum_k{n \choose 2k}$的递归式
+
+    \solution
+
+    先假定$l=1$,有:
+    \begin{align*}
+         & \hat t(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k)                                    \\
+         & \frac{t(n+1,k)}{t(n,k)} = \frac{{n+1 \choose 2k}}{{n \choose 2k}} = \frac{n+1}{n+1-2k} \\
+         & p(n,k) = \beta_0(n)(n+1-2k)+ \beta_1(n)(n+1)                                           \\
+         & \hat t(n,k) = p(n,k)  \frac{t(n,k)}{n+1-2k}                                            \\
+         & \bar t(n,k) = \frac{t(n,k)}{n+1-2k} =\frac{{n \choose 2k}}{n+1-2k}                     \\
+         & \frac{\bar t(n,k+1)}{\bar t(n,k)} = \frac{(n-2k+1)(n-2k)}{(2k+2)(2k+1)}
+    \end{align*}
+
+    可得:
+    \begin{align*}
+        \left\{
+        \begin{aligned}
+            p(n,k) & = 1                    \\
+            q(n,k) & = 4k^2-(4n+2)k+(n^2+n) \\
+            r(n,k) & = 4k^2-2k              \\
+        \end{aligned}
+        \right.
+        \Rightarrow \
+        \left\{
+        \begin{aligned}
+            Q(n,k) & = -4nk+(n^2+n)         \\
+            R(n,k) & = 8k^2-(4n+4)k+(n^2+n) \\
+        \end{aligned}
+        \right.
+    \end{align*}
+
+    所以:
+    \begin{align*}
+        \left\{
+        \begin{aligned}
+            deg(Q)<deg(R)            \\
+            \lambda'=-4n,\ \lambda=8 \\
+        \end{aligned}
+        \right.
+        \Rightarrow
+        deg(s) = deg(p)-deg(R)+1=0
+        \Rightarrow
+        s = \alpha_0(n)
+    \end{align*}
+
+    代入可得:
+    \begin{align*}
+         & \beta_0(n)(n+1-2k)+ \beta_1(n)(n+1) = (4k^2-(4n+2)k+(n^2+n))\alpha_0(n) -(4k^2-2k )\alpha_0(n) \\
+         & -2\beta_0(n)k+ (\beta_0(n)+\beta_1(n))(n+1) = -4n\alpha_0(n)k+(n^2+n)\alpha_0(n)
+    \end{align*}
+
+    比较等式两边关于k的系数可得:
+    \begin{align*}
+        \left\{
+        \begin{aligned}
+             & -2\beta_0(n) =   -4n\alpha_0(n)      \\
+             & \beta_0(n)+\beta_1(n) = n\alpha_0(n) \\
+        \end{aligned}
+        \right.
+        \Rightarrow
+        \left\{
+        \begin{aligned}
+             & \alpha_0(n) = 1 \\
+             & \beta_0(n) = 2n \\
+             & \beta_1(n) = -n \\
+        \end{aligned}
+        \right.
+    \end{align*}
+
+    所以:
+    \begin{align*}
+         & \hat t(n,k) = 2n\cdot t(n,k) -n\cdot t(n+1,k)                   \\
+         & \sum_k [2n\cdot t(n,k) -n\cdot t(n+1,k)] = \sum_k \hat t(n,k)=0 \\
+         & 2nS(n)-nS(n+1)=0
+    \end{align*}
+    也即
+    \begin{align*}
+        \left\{
+        \begin{aligned}
+             & S(0) = 1,\ S(1) = 1    \\
+             & S(n+1)=2S(n),\ (n\ge1) \\
+        \end{aligned}
+        \right.
+        \Rightarrow
+        \left\{
+        \begin{aligned}
+             & S(0) = 1              \\
+             & S(n)=2^{n-1}\ (n\ge1) \\
+        \end{aligned}
+        \right.
+    \end{align*}
+
+
+\end{homeworkProblem}
+
+
+\end{document}
