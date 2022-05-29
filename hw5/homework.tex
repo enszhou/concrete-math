@@ -13,8 +13,8 @@
 \usepackage{xcolor}
 \usepackage{pagecolor}
 
-\pagecolor{black}
-\color{white}
+% \pagecolor{black}
+% \color{white}
 
 
 % hypergeometric function
@@ -326,10 +326,61 @@
 \pagebreak
 
 \begin{homeworkProblem}
-
+    If we toss a coin, it comes up heads with probability $p$, which is fixed
+    but unknown. We toss the coin $n$ times (different tosses are independent), and give
+    an estimate $\hat{p}$ of $p$. Given small $\varepsilon,\delta>0$,
+    choose an $n$ as small as possible such that
+    $\mathrm{Pr}(|\hat{p}-p| \ge \varepsilon)\le \delta$ is satisfied.
 
     \solution
 
+    该实验是n次重复伯努利试验,设第$i$次抛掷硬币结果随机变量为$X_i$
+    \begin{align*}
+        X_i & = \begin{cases}
+            1, & \text{if comes up head at the ith time} \\
+            0, & \text{if comes up tail at the ith time}
+        \end{cases},
+        \quad 0\le i \le n
+    \end{align*}
+    所以$\mathrm{Pr}(X_i=1) = p$,则$EX_i=p$,且$X_1,X_2,\cdots,X_n$相互独立.
+
+    设$X=\sum_{i=1}^nX_i$,则$EX=\sum_{i=1}^nEX_i=np=\mu$,
+
+    本题使用了下面的chernoff bound:
+    \begin{align}
+        \mathrm{Pr}(|X-\mu|\ge \eta \mu)\le  2e^{-\eta ^2\mu/3},\quad 0\le \eta \le 1
+        \label{chernoff}
+    \end{align}
+
+    n次重复实验对$p$的估计为随机变量$\hat{p}$
+    \begin{align*}
+        \hat{p} = \frac{1}{n}\sum_{i=1}^nX_i = \frac{X}{n}
+    \end{align*}
+    所以
+    \begin{align*}
+        \mathrm{Pr}(|\hat{p}-p| \ge \varepsilon)
+         & = \mathrm{Pr}\left(\left|\frac{X}{n}-p\right| \ge \varepsilon\right)
+        = \mathrm{Pr}\left(\left|X-np\right| \ge n\varepsilon\right)                \\
+         & = \mathrm{Pr}\left(\left|X-\mu\right| \ge \frac{np\varepsilon}{p}\right)
+        = \mathrm{Pr}\left(\left|X-\mu\right| \ge \mu\frac{\varepsilon}{p}\right)
+    \end{align*}
+    因为$p$是定值,而$\varepsilon$足够小,所以$ 0\le \frac{\varepsilon}{p} \le 1$,
+    所以取不等式(\ref{chernoff})中的$\eta=\frac{\varepsilon}{p}$可得:
+    \begin{align*}
+        \mathrm{Pr}(|X-\mu|\ge \frac{\varepsilon}{p} \mu)
+        \le  2e^{-(\frac{\varepsilon}{p})^2\mu/3}
+        = 2e^{-n\varepsilon^2/3p}
+    \end{align*}
+    所以若要使$\mathrm{Pr}(|\hat{p}-p| \ge \varepsilon)=\mathrm{Pr}\left(\left|X-\mu\right| \ge \mu\frac{\varepsilon}{p}\right)\le \delta$成立,
+    只需要让$2e^{-n\varepsilon^2/3p} \le \delta$成立即可:
+    \begin{align*}
+        2e^{-n\varepsilon^2/3p} \le \delta
+         & \Leftrightarrow -n\varepsilon^2/3p \le \ln{\frac{\delta}{2}}         \\
+         & \Leftrightarrow n\varepsilon^2/3p \ge \ln{\frac{2}{\delta}}          \\
+         & \Leftrightarrow  n \ge \frac{3p}{\varepsilon^2}\ln{\frac{2}{\delta}} \\
+    \end{align*}
+    所以一个尽可能小的满足条件的$n$应该是
+    $$n=\left\lceil\frac{3p}{\varepsilon^2}\ln{\frac{2}{\delta}}\right\rceil$$
 
 \end{homeworkProblem}
 
