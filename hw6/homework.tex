@@ -1,0 +1,455 @@
+\documentclass[fontset=windows]{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{ctex}
+\usepackage{manfnt}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+
+% \pagecolor{black}
+% \color{white}
+
+
+% hypergeometric function
+\newmuskip\hfmuskip
+\newcommand*\hf[4][6]{%
+  \begingroup % only local assignments
+  \hfmuskip=#1mu\relax
+  \mathchardef\normalcomma=\mathcode`,
+  % make the comma math active
+  \mathcode`\,=\string"8000
+  % and define it to be \hfcomma
+  \begingroup\lccode`\~=`\,
+  \lowercase{\endgroup\let~}\hfcomma
+  % typeset the formula
+%   {}_{#2}F_{#3}{\left(\genfrac..{0pt}{}{#4}{#5}\bigg|#6\right)}%
+  F{\left(\genfrac..{0pt}{}{#2}{#3}\bigg|#4\right)}%
+  \endgroup
+}
+\newcommand{\hfcomma}{{\normalcomma}\mskip\hfmuskip}
+% hypergeometric function
+
+
+\renewcommand{\algorithmicrequire}{\textbf{Input:}}  % Use Input in the format of Algorithm
+\renewcommand{\algorithmicensure}{\textbf{Output:}} % Use Output in the format of Algorithm
+
+\usetikzlibrary{automata,positioning,arrows,shapes,chains}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass: \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+\newcommand{\hmwkTitle}{Homework 6}
+\newcommand{\hmwkDueDate}{June 14, 2022}
+\newcommand{\hmwkClass}{Concrete Math}
+\newcommand{\hmwkClassInstructor}{Professor Xie Wei}
+\newcommand{\hmwkStuNum}{\textbf{SA21011018}}
+\newcommand{\hmwkAuthorName}{\textbf{Zhou Enshuai}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 14:00}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor}}
+    \vspace{3in}
+}
+
+\author{\hmwkStuNum\\ \hmwkAuthorName}
+\date{\today}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{~\\ \textbf{\Large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+\maketitle
+
+\pagebreak
+
+\begin{homeworkProblem}
+
+    求概率生成函数是$G(z)=\frac{z^3}{z^3-8(z-1)}$的离散随机变量的3阶累积量.
+
+    \solution
+
+    如果概率生成函数可以分解成两个概率生成函数的比值:
+    \begin{align*}
+        G(z)=\frac{H(z)}{F(z)}
+    \end{align*}
+    则
+    \begin{align*}
+         & \ln G(z)=\ln H(z) - \ln F(z)       \\
+         & \ln G(e^t)=\ln H(e^t) - \ln F(e^t)
+    \end{align*}
+    所以此时$G(z)$的各阶累积量为${H(z)}$和${F(z)}$的对应累积量的差.
+
+    本题中伪概率生成函数为:
+    \begin{align*}
+        H(z) = z^3,\
+        F(z)=z^3-8(z-1)
+    \end{align*}
+    所以
+    \begin{align*}
+         & H(e^t) = e^{3t} = 1+\frac{3}{1!}t+ \frac{9}{2!}t^2 + \frac{27}{3!}t^3+\cdots                \\
+         & F(e^t) = e^{3t}-8(e^t-1) = 1+\frac{3-8}{1!}t+ \frac{9-8}{2!}t^2 + \frac{27-8}{3!}t^3+\cdots \\
+    \end{align*}
+    对于$H(z)$而言:
+    \begin{align*}
+         & \mu_1=3,\ \mu_2=9,\ \mu_3=27 \\
+         & \Rightarrow
+        \left\{
+        \begin{aligned}
+             & \kappa_1=\mu_1=3                      \\
+             & \kappa_2=\mu_2-\mu_1^2=0              \\
+             & \kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3=0 \\
+        \end{aligned}
+        \right.
+    \end{align*}
+    对于$F(z)$而言:
+    \begin{align*}
+         & \mu_1=-5,\ \mu_2=1,\ \mu_3=19 \\
+         & \Rightarrow
+        \left\{
+        \begin{aligned}
+             & \kappa_1=\mu_1=-5                        \\
+             & \kappa_2=\mu_2-\mu_1^2=-24               \\
+             & \kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3=-216 \\
+        \end{aligned}
+        \right.
+    \end{align*}
+    则$G(z)$的3阶累积量为$\kappa_3=0-(-216)=216$.
+
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+    连续抛掷一枚硬币直到第一次出现 HTHTH 时停止 (H 表示正面, T 表示反
+    面), 其中每次抛掷是独立的, 且每次正面出现的概率是 p. 求抛掷硬币次数
+    的期望和方差.
+
+    \solution
+
+    % 根据预期的模式画出下面有限自动机:
+
+    % \begin{figure}[h]
+    %     \begin{tikzpicture}[->,>=stealth',shorten >=1pt,auto,node distance=2cm,
+    %             thick,base node/.style={circle,draw,minimum size=16pt},
+    %             real node/.style={double,circle,draw,minimum size=35pt}]
+
+    %         \node[shape=circle,draw=green,initial text=,initial](0){0};
+    %         \node[shape=circle,draw=green](1)[right of=0 ]{1};
+    %         \node[shape=circle,draw=green](2)[right of=1 ]{2};
+    %         \node[shape=circle,draw=green](3)[right of=2 ]{3};
+    %         \node[shape=circle,draw=green](4)[right of=3 ]{4};
+    %         \node[shape=circle,draw=green,accepting](5)[right of=4 ]{5};
+
+    %         \path[]
+    %         (0) edge [loop above]node {T} (0)
+    %         (1) edge [loop above]node {H} (1)
+    %         (2) edge [bend left=100] node {T} (0)
+    %         (3) edge [bend left=100] node {H} (1)
+    %         (4) edge [bend left=100] node {T} (0)
+
+    %         (0) edge node {H} (1)
+    %         (1) edge node {T} (2)
+    %         (2) edge node {H} (3)
+    %         (3) edge node {T} (4)
+    %         (4) edge node {H} (5);
+    %     \end{tikzpicture}
+    % \end{figure}
+
+    % 根据上面有限自动机可得:
+    % \begin{align*}
+    %      & S_0=1+S_0T+S_2T+S_4T \\
+    %      & S_1=S_0H+S_1H+S_3H \\
+    %      & S_2=S_1T           \\
+    %      & S_3=S_2H           \\
+    %      & S_4=S_3T           \\
+    %      & S_5=S_4H           \\
+    % \end{align*}
+
+    % 解得
+    % \begin{align*}
+    %     S_1 = 
+    % \end{align*}
+
+    设所有不包含HTHTH模式的序列集合是N,目标序集合是S,则有
+    \begin{align*}
+         & 1+N(H+T)=N+S          \\
+         & N(HTHTH)=S(1+TH+THTH) \\
+    \end{align*}
+    当$k=5,3,1$时,有$A_{(k)}=A^{(k)}$,所以
+    \begin{align*}
+         & EX = \sum_{k=1}^m \widetilde A_{(k)}[A_{(k)}=A^{(k)}]=
+        \widetilde A_{(1)} + \widetilde A_{(3)} + \widetilde A_{(5)} = \frac{1}{p}+\frac{1}{p^2(1-p)} + \frac{1}{p^3(1-p)^2}               \\
+         & VX = (EX)^2-\sum_{k=1}^m (2k-1) \widetilde A_{(k)}[A_{(k)}=A^{(k)}]
+        =(EX)^2-\widetilde A_{(1)} - 5\widetilde A_{(3)}- 9\widetilde A_{(5)}                                                              \\
+         & = \left( \frac{1}{p}+\frac{1}{p^2(1-p)} + \frac{1}{p^3(1-p)^2}\right)^2 -  \frac{1}{p}-\frac{5}{p^2(1-p)} -\frac{9}{p^3(1-p)^2}
+    \end{align*}
+
+
+
+\end{homeworkProblem}
+\pagebreak
+
+\begin{homeworkProblem}
+
+    求$(n+2+\frac{3}{n+1})^n$精确到相对误差$O(n^{-2})$的渐近值.
+
+    \solution
+
+    \begin{align*}
+         & \left(n+2+\frac{3}{n+1}\right)^n
+        = n^n\left(1+\frac{2}{n}+\frac{3}{n(n+1)}\right)^n                         \\
+         & = n^n\left(1+2n^{-1}+3n^{-2}\frac{1}{1+n^{-1}}\right)^n                 \\
+         & = n^n\left(1+2n^{-1}+3n^{-2}(1+O(n^{-1}))\right)^n                      \\
+         & = n^n\left(1+2n^{-1}+3n^{-2}+O(n^{-3})\right)^n                         \\
+         & = n^n\exp\left\{n\ln(1+2n^{-1}+3n^{-2}+O(n^{-3}))\right\}               \\
+         & = n^n\exp\left\{n\left[2n^{-1}+3n^{-2}+O(n^{-3})
+        -\frac{(2n^{-1}+3n^{-2}+O(n^{-3}))^2}{2}
+        +O((2n^{-1}+3n^{-2}+O(n^{-3}))^3)\right]\right\}                           \\
+         & = n^n\exp\left\{n\left[2n^{-1}+3n^{-2}+O(n^{-3})-2n^{-2}\right]\right\} \\
+         & = n^n\exp\left\{n\left[2n^{-1}+n^{-2}+O(n^{-3})\right]\right\}          \\
+         & = n^n\exp\left\{2+n^{-1}+O(n^{-2})\right\}                              \\
+         & = n^n e^2 \left(1+n^{-1}+O(n^{-2})\right) \left(1+O(n^{-2})\right)      \\
+         & = n^n e^2 \left(1+n^{-1}+O(n^{-2})\right)                               \\
+         & = n^n e^2 (1+n^{-1}) \left(1+O(n^{-2})\frac{1}{1+n^{-1}}\right)         \\
+         & = n^n e^2 (1+n^{-1}) \left(1+O(n^{-2})(1+O(n^{-1}))\right)              \\
+         & = n^n e^2 (1+n^{-1}) \left(1+O(n^{-2})\right)                           \\
+    \end{align*}
+
+\end{homeworkProblem}
+\pagebreak
+
+\begin{homeworkProblem}
+
+    求$\sum^n_{k=1}\frac{1}{n^2+k^2}$精确到绝对误差$O(n^{-5})$的渐近值.
+
+    \solution
+    % \begin{align*}
+    %      & \sum^n_{k=1}\frac{1}{n^2+k^2}
+    %     = \sum^n_{0\le k <n}\frac{1}{n^2+k^2} + \frac{1}{2n^2}-\frac{1}{n^2}                                                                                     \\
+    %      & = \sum^n_{0\le k <n}\frac{1}{n^2+k^2} - \frac{1}{2n^2}                                                                                                \\
+    %      & = - \frac{1}{2n^2} + \int_0^n\frac{1}{n^2+x^2}dx -\frac{1}{2}\frac{1}{n^2+x^2}\Big |^n_0
+    %     + \frac{B_2}{2}f^\prime(x)\Big|^n_0+ O((2\pi)^{-2})\int_0^n|f^{\prime\prime}(x)|dx                                                                       \\
+    %      & = - \frac{1}{4n^2} + \frac{\pi}{4n} + \frac{1}{12}\frac{-2x}{(n^2+x^2)^2}\Big|^n_0
+    %     + O((2\pi)^{-2})\int_0^n|\frac{6x^2-2n^2}{(n^2+x^2)^3}|dx                                                                                                \\
+    %      & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ O((2\pi)^{-2})\int_0^n|\frac{6x^2-2n^2}{(n^2+x^2)^3}|dx                                        \\
+    %      & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}
+    %     + O((2\pi)^{-2}) \left(\int_0^{\frac{n}{\sqrt{3}}}\frac{-(6x^2-2n^2)}{(n^2+x^2)^3}dx +\int_{\frac{n}{\sqrt{3}}}^n\frac{6x^2-2n^2}{(n^2+x^2)^3}dx \right) \\
+    %      & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}
+    %     + O((2\pi)^{-2}) \left( f^\prime(x)\Big|_{\frac{n}{\sqrt{3}}}^n-f^\prime(x)\Big|_0^{\frac{n}{\sqrt{3}}} \right)                                          \\
+    %      & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3} + O((2\pi)^{-2})O(n^{-3})                                                                       \\
+    %      & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3} + O(n^{-3})
+    % \end{align*}
+
+    ~\\
+    设$f(x)=\frac{1}{n^2+x^2}$,则
+    \begin{align*}
+         & f^{(1)}(x) = \frac{-2x}{(n^2+x^2)^2}                                             \\
+         & f^{(2)}(x) = \frac{6x^2-2n^2}{(n^2+x^2)^3}                                       \\
+         & f^{(3)}(x) = \frac{24x(n^2-x^2)}{(n^2+x^2)^4} \Rightarrow f^{(3)}(n)\Big|^n_0= 0 \\
+         & f^{(4)}(x) = \frac{24(5(2n^2-x^2)^2-19n^4)}{(n^2+x^2)^5}
+        \Rightarrow
+        \left\{
+        \begin{aligned}
+             & f^{(4)}(x) \ge 0, \quad 0\le x \le \sqrt{2-\sqrt{\frac{19}{5}}}n \\
+             & f^{(4)}(x) < 0, \quad \sqrt{2-\sqrt{\frac{19}{5}}}n < x \le n    \\
+        \end{aligned}
+        \right.
+    \end{align*}
+
+    为方便计算,设$f^{(4)}(x)$的零点为$cn=\sqrt{2-\sqrt{\frac{19}{5}}}n$,其中c为常数系数.取欧拉求和公式中的$m=2$
+    \begin{align*}
+         & \sum^n_{k=1}\frac{1}{n^2+k^2}
+        = \sum^n_{0\le k <n}\frac{1}{n^2+k^2} + \frac{1}{2n^2}-\frac{1}{n^2}                                                                                                                      \\
+         & = \sum^n_{0\le k <n}\frac{1}{n^2+k^2} - \frac{1}{2n^2}                                                                                                                                 \\
+         & = - \frac{1}{2n^2} + \int_0^n\frac{1}{n^2+x^2}dx -\frac{1}{2}\frac{1}{n^2+x^2}\Big |^n_0
+        + \frac{B_2}{2}f^\prime(x)\Big|^n_0+\frac{B_4}{24}f^{(3)}(x)\Big|^n_0+ O((2\pi)^{-2})\int_0^n|f^{(4)}(x)|dx                                                                               \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} + \frac{1}{12}\frac{-2x}{(n^2+x^2)^2}\Big|^n_0
+        + 0 + O((2\pi)^{-2})\left(\int_0^{\sqrt{2-\sqrt{\frac{19}{5}}}n}f^{(4)}(x)dx + \int_{\sqrt{2-\sqrt{\frac{19}{5}}}n}^n-f^{(4)}(x)dx\right)                                                 \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ O((2\pi)^{-2})\left(f^{(3)}(x)\Big|_0^{\sqrt{2-\sqrt{\frac{19}{5}}}n} -f^{(3)}(x)\Big|_{\sqrt{2-\sqrt{\frac{19}{5}}}n}^n\right) \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ 2O((2\pi)^{-2})f^{(3)}({\sqrt{2-\sqrt{\frac{19}{5}}}n})                                                                         \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ O(\frac{24cn(n^2-c^2n^2)}{(n^2+c^2n^2)^4})                                                                                      \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ O(\frac{24c(1-c^2)n^3}{(1+c^2)^4n^8})                                                                                           \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ O(\frac{24c(1-c^2)}{(1+c^2)^4}n^{-5})                                                                                           \\
+         & = - \frac{1}{4n^2} + \frac{\pi}{4n} - \frac{1}{24n^3}+ O(n^{-5})                                                                                                                       \\
+    \end{align*}
+
+\end{homeworkProblem}
+\pagebreak
+
+\begin{homeworkProblem}
+
+    求$\sum_k{2n \choose k}^3$精确到相对误差$O(n^{-1/4})$的渐近值.
+
+    \solution
+    用$n+k$代替$k$
+    \begin{align*}
+        A_n = \sum_k{2n \choose n+k}^3 = \sum_k\left(\frac{(2n!)}{(n+k)!(n-k)!}\right)^3
+    \end{align*}
+    使用尾部交换技巧
+    \begin{align*}
+         & \left(\frac{(2n!)}{(n+k)!(n-k)!}\right)^3 = a_k(n) = b_k(n) + O(c_k(n)),\quad k\in D_n                                                                      \\
+         & A_{n}=\sum_{k} b_{k}(n)+O\left(\sum_{k \notin D_{n}} a_{k}(n)\right)+O\left(\sum_{k \notin D_{n}} b_{k}(n)\right)+\sum_{k \in D_{n}} O\left(c_{k}(n)\right)
+    \end{align*}
+    对$a_k(n)$使用对数形式的斯特林近似
+    \begin{align*}
+        \ln a_k(n) & = 3\left(\ln(2n)!-\ln(n+k)!-\ln(n-k)!\right)                               \\
+                   & = 3\left(\ln(2n)!-\ln(n+k)!-\ln(n-k)!\right)                               \\
+                   & = 3\{2 n \ln 2 n-2 n+\frac{1}{2} \ln 2 n+\sigma+O\left(n^{-1}\right)       \\
+                   & -(n+k) \ln(n+k)+n+k-\frac{1}{2} \ln(n+k)-\sigma+O\left((n+k)^{-1}\right)   \\
+                   & -(n-k) \ln(n-k)+n-k-\frac{1}{2} \ln(n-k)-\sigma+O\left((n-k)^{-1}\right)\}
+    \end{align*}
+
+    定义$D_n$
+    \begin{align*}
+        k \in D_n \Leftrightarrow |k| \le n^{1/2+\varepsilon}
+    \end{align*}
+    在$D_n$内将$a_K(n)$进一步化简
+    \begin{align*}
+        \frac{1}{3}\ln a_{k}(n)= & \left(2 n+\frac{1}{2}\right) \ln 2-\sigma-\frac{1}{2} \ln n+O\left(n^{-1}\right)       \\
+                                 & -\left(n+k+\frac{1}{2}\right) \ln (1+k / n)-\left(n-k+\frac{1}{2}\right) \ln (1-k / n)
+    \end{align*}
+    在$D_n$内将$\ln(1\pm k/n)$展开
+    \begin{align*}
+        \ln(1\pm \frac{k}{n}) & = \pm \frac{k}{n} - \frac{k^2}{2n^2} + O(\frac{k^3}{n^3})                  \\
+                              & = \pm \frac{k}{n} - \frac{k^2}{2n^2} + O(\frac{n^{3/2+3\varepsilon}}{n^3}) \\
+                              & = \pm \frac{k}{n} - \frac{k^2}{2n^2} + O(n^{-3/2+3\varepsilon})
+    \end{align*}
+    将其与$n\pm k+\frac{1}{2}$相乘得到
+    \begin{align*}
+        (n\pm k+\frac{1}{2})\ln(1\pm \frac{k}{n}) =\pm k + \frac{k^2}{2n} + O(n^{-1/2+3\varepsilon})
+    \end{align*}
+    代入该结果进一步得到
+    \begin{align*}
+         & \frac{1}{3}\ln a_{k}(n)=  \left(2 n+\frac{1}{2}\right) \ln 2-\sigma-\frac{1}{2} \ln n - \frac{k^2}{n} + O(n^{-1/2+3\varepsilon})                      \\
+         & a_{k}(n)=  exp\left\{ 3 \left (\left(2 n+\frac{1}{2}\right) \ln 2-\sigma-\frac{1}{2} \ln n - \frac{k^2}{n} + O(n^{-1/2+3\varepsilon}) \right)\right\} \\
+         & a_{k}(n)= \frac{2^{6n+3/2}}{e^{3\sigma}n^{3/2}}e^{-3k^2/n}\left(1+O(n^{-1/2+3\varepsilon})\right)                                                     \\
+    \end{align*}
+    所以
+    \begin{align*}
+        b_k(n) = \frac{2^{6n+3/2}}{e^{3\sigma}n^{3/2}}e^{-3k^2/n},\quad c_k(n) = 2^{6n}n^{-2+3\varepsilon}e^{-3k^2/n}
+    \end{align*}
+    近似求和$b_k(n)$,并代入$e^\sigma=\sqrt{2\pi}$
+    \begin{align*}
+        \sum_k b_k(n) & = \sum_k \frac{2^{6n+3/2}}{e^{3\sigma}n^{3/2}}e^{-3k^2/n} = \frac{2^{6n+3/2}}{e^{3\sigma}n^{3/2}}\sum_k e^{-3k^2/n}   \\
+                      & = \frac{2^{6n+3/2}}{e^{3\sigma}n^{3/2}}\sum_k e^{-3k^2/n} = \frac{2^{6n+3/2}}{e^{3\sigma}n^{3/2}}\Theta_{\frac{n}{3}} \\
+                      & =  \frac{2^{6n+3/2}\sqrt{\pi}}{\sqrt{3}e^{3\sigma}n}(1+O(n^{-M}))                                                     \\
+                      & =  \frac{2^{6n}}{\sqrt{3}\pi n}(1+O(n^{-M}))                                                     \\
+    \end{align*}
+    计算误差项
+    \begin{align*}
+        \sum_{(c)}(n) = \sum_{|k| \le n^{1/2+\varepsilon}} 2^{6n}n^{-2+3\varepsilon}e^{-3k^2/n} \le  2^{6n}n^{-2+3\varepsilon}\Theta_{\frac{n}{3}}
+         = O( 2^{6n}n^{-3/2+3\varepsilon})
+    \end{align*}
+    其他的尾部经验证是可以忽略不计的,所以
+    \begin{align*}
+        \sum_k{2n \choose k}^3 = \frac{2^{6n}}{\sqrt{3}\pi n} + O( 2^{6n}n^{-3/2+3\varepsilon}) =\frac{2^{6n}}{\sqrt{3}\pi n}\left(1+O(n^{-1/2+3\varepsilon})\right)
+    \end{align*}
+    可以取$\varepsilon=\frac{1}{12}$得到
+    \begin{align*}
+        \sum_k{2n \choose k}^3 =\frac{2^{6n}}{\sqrt{3}\pi n}\left(1+O(n^{-1/4})\right)
+    \end{align*}
+
+\end{homeworkProblem}
+\pagebreak
+
+\end{document}

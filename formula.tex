@@ -1,0 +1,64 @@
+\documentclass[fontset=windows]{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{ctex}
+\usepackage{manfnt}
+\usepackage{xcolor}
+\usepackage{pagecolor}
+
+
+\begin{document}
+
+\begin{align}
+      & EX = G_X^\prime (1)                                         \\
+      & VarX=G_X^{\prime\prime} (1)+G_X^\prime (1)-G_X^\prime (1)^2 \\
+      & \left\{
+     \begin{aligned}
+           & \kappa_1=\mu_1=3                      \\
+           & \kappa_2=\mu_2-\mu_1^2=0              \\
+           & \kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3=0 \\
+     \end{aligned}
+     \right.                                                        \\
+     \mathrm(coin)
+      & \left\{
+     \begin{aligned}
+           & EX = \sum_{k=1}^m \widetilde A_{(k)}[A_{(k)}=A^{(k)}]               \\
+           & VX = (EX)^2-\sum_{k=1}^m (2k-1) \widetilde A_{(k)}[A_{(k)}=A^{(k)}]
+     \end{aligned}
+     \right.                                                        \\
+\end{align}
+
+欧拉求和公式：
+\begin{align}
+     \begin{gathered}
+          \sum_{a \le k<b} f(k)=\int_{a}^{b} f(x) \mathrm{d} x-\left.\frac{1}{2} f(x)\right|_{a} ^{b}+\left.\sum_{k=1}^{m} \frac{B_{2 k}}{(2 k) !} f^{(2 k-1)}(x)\right|_{a} ^{b} \\
+          +O\left((2 \pi)^{-2 m}\right) \int_{a}^{b}\left|f^{(2 m)}(x)\right| \mathrm{d} x
+     \end{gathered}
+\end{align}
+
+伯努利数:
+\begin{align}
+     \begin{array}{c|ccccccccccccc}
+          n            & 0 & 1            & 2           & 3 & 4             & 5 & 6            & 7 & 8             & 9 & 10           & 11 & 12                \\
+          \hline B_{n} & 1 & \frac{-1}{2} & \frac{1}{6} & 0 & \frac{-1}{30} & 0 & \frac{1}{42} & 0 & \frac{-1}{30} & 0 & \frac{5}{66} & 0  & \frac{-691}{2730}
+     \end{array}
+\end{align}
+
+对数形式斯特林近似
+\begin{align}
+     \ln n !=n \ln n-n+\frac{\ln n}{2}+\frac{\ln 2\pi}{2}+\frac{1}{12 n}-\frac{1}{360 n^{3}}+\frac{\varphi_{2, n}}{1260 n^{5}}
+\end{align}
+
+钟形求和
+\begin{align}
+     \Theta_{n}=\sum_{k} e^{-k^2/n} = \sqrt{\pi n} + O(n^{-M})
+\end{align}
+
+\end{document}
